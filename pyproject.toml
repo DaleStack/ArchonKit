@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "archonkit"
+version = "0.1.0"
+description = "MPA-first FastAPI scaffolding toolkit"
+authors = [{ name = "Casey Dale Siatong" }]
+dependencies = ["click", "fastapi", "uvicorn", "jinja2"]
+
+[project.scripts]
+archonkit = "archonkit.cli:cli"
