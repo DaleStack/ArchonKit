@@ -6,6 +6,8 @@ FastAPI is amazing for APIs, but when it comes to **multi-page apps (MPA)** setu
 
 ArchonKit fixes that by providing a **FastAPI-based toolkit** with a **Django-like developer experience**, while staying fast and modern.
 
+---
+
 ## ❓ Why FastAPI if ArchonKit is MPA-first?
 
 Good question! If you’re building server-rendered multi-page apps (MPAs), Django might feel like the obvious choice. So why does ArchonKit use **FastAPI** instead?
@@ -16,3 +18,12 @@ Good question! If you’re building server-rendered multi-page apps (MPAs), Djan
 - 🎯 **Leverages Django knowledge without lock-in** – ArchonKit gives you the familiar "apps + templates + ORM + migrations" workflow from Django, but on a leaner, async-native stack.
 
 In short: **ArchonKit = Django’s developer experience + FastAPI’s async performance**.
+
+---
+
+## ✨ Features
+- **MPA-First**: Templates and static files are built-in.  
+- **SQLAlchemy by Default**: Database integration comes ready-to-use.  
+- **Familiar Structure**: Opinionated project layout inspired by Django, but simplified.  
+- **CLI Included**: Quickly scaffold apps and project files. 
+- **Extendable**: Use FastAPI’s async power, but without losing the batteries.
