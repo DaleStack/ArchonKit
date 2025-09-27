@@ -6,7 +6,7 @@ name = "archonkit"
 version = "0.1.0"
 description = "MPA-first FastAPI scaffolding toolkit"
 authors = [{ name = "Casey Dale Siatong" }]
-dependencies = ["click", "fastapi[standard]"]
+dependencies = ["click", "fastapi[standard], "alembic"]
 
 [project.scripts]
 archonkit = "archonkit.cli:cli"
