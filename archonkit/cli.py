@@ -135,8 +135,10 @@ def add(app_name):
     os.makedirs(f"{app_path}/templates/{app_name}", exist_ok=True)
     os.makedirs(f"{app_path}/static/{app_name}", exist_ok=True)
 
-    with open(f"{app_path}/schema.py", "w") as f:
-        f.write("")
+    with open(f"{app_path}/forms.py", "w") as f:
+        f.write('''# write your form here
+from pydantic import BaseModel, constr                
+''')
 
     with open(f"{app_path}/__init__.py", "w") as f:
         f.write("")
