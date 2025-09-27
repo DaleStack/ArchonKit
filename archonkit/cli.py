@@ -97,7 +97,18 @@ def get_db():
 
     # core/utils.py
     with open(f"{project_name}/core/utils.py", "w") as f:
-        f.write("# Place helper functions here\n")
+        f.write('''# Place helper functions here\n
+    from fastapi import Request
+    from pydantic import BaseModel
+                
+    # Form Parsing
+    async def parse_form(request: Request, schema: type[BaseModel]) -> BaseModel:
+        form_data = await request.form()
+        clean_data = {k: v for k, v in form_data.items()}
+        return schema(**clean_data)
+
+                
+''')
 
     click.echo(f"Created new ArchonKit project: {project_name}")
 
