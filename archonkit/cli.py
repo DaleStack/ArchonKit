@@ -1,6 +1,11 @@
 import os
 import click
 
+def is_valid_name(name):
+    """Check if name is valid for Python projects/modules"""
+    import re
+    return re.match(r'^[a-zA-Z][a-zA-Z0-9_]*$', name) is not None
+
 @click.group()
 @click.version_option()
 def cli():
@@ -12,6 +17,11 @@ def cli():
 @click.argument("project_name")
 def new(project_name):
     """Create a new ArchonKit project"""
+
+    if not is_valid_name(project_name):
+        click.echo("Project name must start with a letter and contain only letters, numbers, and underscores")
+        return
+    
     if os.path.exists(project_name):
         click.echo(f"Project {project_name} already exists!")
         return
@@ -36,7 +46,7 @@ app = FastAPI()
 
 
 # Register Static File:
-app.mount("/static/<app_name>", StaticFiles(directory="<app_name>/static/<app_name>"), name="<app_name>_static")
+# app.mount("/static/<app_name>", StaticFiles(directory="<app_name>/static/<app_name>"), name="<app_name>_static")
 
 
 
@@ -96,6 +106,11 @@ def get_db():
 @click.argument("app_name")
 def add(app_name):
     """Add a new app to the project"""
+
+    if not is_valid_name(app_name):
+        click.echo("App name must start with a letter and contain only letters, numbers, and underscores")
+        return
+    
     base_path = os.getcwd()
     app_path = os.path.join(base_path, app_name)
 
@@ -105,6 +120,9 @@ def add(app_name):
 
     os.makedirs(f"{app_path}/templates/{app_name}", exist_ok=True)
     os.makedirs(f"{app_path}/static/{app_name}", exist_ok=True)
+
+    with open(f"{app_path}/schema.py", "w") as f:
+        f.write("")
 
     with open(f"{app_path}/__init__.py", "w") as f:
         f.write("")
@@ -118,7 +136,8 @@ def add(app_name):
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-templates = Jinja2Templates(directory="templates/{app_name}")
+templates = Jinja2Templates(directory="{app_name}/templates/{app_name}")
+
 
 router = APIRouter()
 
