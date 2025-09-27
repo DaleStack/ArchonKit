@@ -6,6 +6,6 @@ FastAPI is amazing for APIs, but when it comes to **multi-page apps (MPA)** setu
 
 ArchonKit fixes that by providing a **FastAPI-based toolkit** with a **Django-like developer experience**, while staying fast and modern.
 
-## Why FastAPI if ArchonKit is MPA-first?
+## ❓ Why FastAPI if ArchonKit is MPA-first?
 
 Good question! If you’re building server-rendered multi-page apps (MPAs), Django might feel like the obvious choice. So why does ArchonKit use **FastAPI** instead?
