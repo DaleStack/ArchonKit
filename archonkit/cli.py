@@ -35,6 +35,7 @@ def new(project_name):
             '''from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from core.database import engine, Base
 
 # Import you app first: from <app_name> import routers as <app_name>.router
 
@@ -44,6 +45,7 @@ app = FastAPI()
 # Register Route like this:
 # app.include_router(<app_name>.router, prefix="/<app_name>")
 
+Base.metadata.create_all(bind=engine)
 
 # Register Static File:
 # app.mount("/static/<app_name>", StaticFiles(directory="<app_name>/static/<app_name>"), name="<app_name>_static")
@@ -76,11 +78,12 @@ settings = Settings()
     with open(f"{project_name}/core/database.py", "w") as f:
         f.write(
             '''from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 from core.config import settings
 
 engine = create_engine(settings.DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
 def get_db():
     db = SessionLocal()
@@ -98,14 +101,14 @@ def get_db():
     # core/utils.py
     with open(f"{project_name}/core/utils.py", "w") as f:
         f.write('''# Place helper functions here\n
-    from fastapi import Request
-    from pydantic import BaseModel
+from fastapi import Request
+from pydantic import BaseModel
                 
-    # Form Parsing
-    async def parse_form(request: Request, schema: type[BaseModel]) -> BaseModel:
-        form_data = await request.form()
-        clean_data = {k: v for k, v in form_data.items()}
-        return schema(**clean_data)
+# Form Parsing
+async def parse_form(request: Request, schema: type[BaseModel]) -> BaseModel:
+    form_data = await request.form()
+    clean_data = {k: v for k, v in form_data.items()}
+    return schema(**clean_data)
 
                 
 ''')
