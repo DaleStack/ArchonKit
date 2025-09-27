@@ -1,4 +1,4 @@
-# ArchonKit: The Fast, Familiar, MPA-First Python ToolKit
+# 👑 ArchonKit: The Fast, Familiar, MPA-First Python ToolKit
 
 ## 🚀 Why ArchonKit?
 ArchonKit was born out of frustration. Coming from Django, I’m used to a **batteries-included** framework — one that makes building projects smooth without too much boilerplate.  
