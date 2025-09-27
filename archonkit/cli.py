@@ -144,7 +144,9 @@ from pydantic import BaseModel, constr
         f.write("")
 
     with open(f"{app_path}/models.py", "w") as f:
-        f.write("# Define your models here\n")
+        f.write('''# Define your models here\n
+from core.database import Base
+''')
 
     with open(f"{app_path}/routers.py", "w") as f:
         f.write(
