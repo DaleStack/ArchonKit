@@ -24,6 +24,7 @@ In short: **ArchonKit = Django’s developer experience + FastAPI’s async perf
 ## ✨ Features
 - **MPA-First**: Templates and static files are built-in.  
 - **SQLAlchemy by Default**: Database integration comes ready-to-use.  
+- **Alembic by Default**: Database Model Migrations
 - **Familiar Structure**: Opinionated project layout inspired by Django, but simplified.  
 - **CLI Included**: Quickly scaffold apps and project files. 
 - **Extendable**: Use FastAPI’s async power, but without losing the batteries.
