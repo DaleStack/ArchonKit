@@ -23,26 +23,57 @@ async def root(request: Request):
 
 
 def create_feature(feature_name):
+    # Create feature directory structure
     os.makedirs(feature_name, exist_ok=True)
+    os.makedirs(os.path.join(feature_name, "templates", feature_name), exist_ok=True)
+    os.makedirs(os.path.join(feature_name, "static"), exist_ok=True)
+
+    # Create empty forms.py and models.py
     open(os.path.join(feature_name, "forms.py"), "a").close()
     open(os.path.join(feature_name, "models.py"), "a").close()
-    os.makedirs(os.path.join(feature_name, "templates"), exist_ok=True)
-    os.makedirs(os.path.join(feature_name, "static"), exist_ok=True)
-    # Write routes.py boilerplate
-    boilerplate = f"""from fastapi import APIRouter
+
+    # Boilerplate routes.py with template rendering
+    routes_boilerplate = f"""from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+
+templates = Jinja2Templates(directory="{feature_name}/templates/{feature_name}")
 
 router = APIRouter(
     prefix="",
     tags=["{feature_name}"]
 )
 
-@router.get("/", tags=["{feature_name}"])
-async def feature_root():
-    \"\"\"Root endpoint for this feature.\"\"\"
-    return {{"msg": "Welcome to {feature_name}!"}}
+@router.get("/", response_class=HTMLResponse)
+async def feature_root(request: Request):
+    return templates.TemplateResponse("index.html", {{"request": request, "msg": "Welcome to {feature_name}!"}})
 """
     with open(os.path.join(feature_name, "routes.py"), "w") as f:
-        f.write(boilerplate)
+        f.write(routes_boilerplate)
+
+    # Boilerplate base.html for template inheritance
+    base_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Feature{% endblock %}</title>
+</head>
+<body>
+    {% block content %}{% endblock %}
+</body>
+</html>
+"""
+    with open(os.path.join(feature_name, "templates", feature_name, "base.html"), "w") as f:
+        f.write(base_html)
+
+    # Boilerplate index.html extending base.html
+    index_html = """{% extends "base.html" %}
+{% block content %}
+<h1>{{ msg }}</h1>
+{% endblock %}
+"""
+    with open(os.path.join(feature_name, "templates", feature_name, "index.html"), "w") as f:
+        f.write(index_html)
 
 
 
