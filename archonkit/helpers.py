@@ -74,6 +74,22 @@ settings = Settings()
     with open(f"{app_name}/core/config.py", "w") as f:
         f.write(config_py)
 
+    # Create core/utils.py
+    utils_py = '''
+from passlib.context import CryptContext
+
+# Uses argon2 (which defaults to argon2id variant in Passlib)
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    """Hash the password securely using argon2id."""
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verify a plain password against the argon2id hash."""
+    return pwd_context.verify(plain_password, hashed_password)
+'''
+
 
 
 
