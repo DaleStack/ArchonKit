@@ -1,5 +1,5 @@
 import click
-from .helpers import create_app, create_feature
+from .helpers import create_app, create_feature, inject_feature_to_main
 
 @click.group()
 def archonkit():
@@ -15,10 +15,12 @@ def new(app_name):
 
 @archonkit.command()
 @click.argument("feature_name")
-def feature(feature_name):
-    """Add a modular app (users, blog, etc.) with clean layout."""
+@click.argument("app_dir", default=".")
+def feature(feature_name, app_dir):
+    """Add a modular app (users, blog, etc.) and inject into main.py."""
     create_feature(feature_name)
-    click.echo(f"Added feature structure for: {feature_name}")
+    inject_feature_to_main(app_dir, feature_name)
+    click.echo(f"Added feature structure for: {feature_name} and wired it into {app_dir}/main.py")
 
 if __name__ == "__main__":
     archonkit()
