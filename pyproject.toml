@@ -1,11 +1,18 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "archonkit"
 version = "0.1.0"
 description = "A FastAPI app scaffolding toolkit"
-authors = ["Kei Siatong"]
+authors = [
+  { name = "Kei Siatong", email = "daledev@gmail.com" }
+]
 requires-python = ">=3.8"
 dependencies = [
   "click>=8.0.0",
+  "fastapi[standard]"
 ]
 
 [project.scripts]

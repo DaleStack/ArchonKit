@@ -1,5 +1,5 @@
 import click
-import os
+from .helpers import create_app, create_feature
 
 @click.group()
 def archonkit():
@@ -10,22 +10,15 @@ def archonkit():
 @click.argument("app_name")
 def new(app_name):
     """Create a new top-level app/project."""
-    os.makedirs(f"{app_name}/core", exist_ok=True)
-    with open(f"{app_name}/main.py", "w") as f:
-        f.write("# FastAPI entrypoint\n")
+    create_app(app_name)
     click.echo(f"Created new app: {app_name}")
 
 @archonkit.command()
 @click.argument("feature_name")
 def feature(feature_name):
-    """Add a Django-style feature/app ('users', 'blog', etc)."""
-    structure = ["routes", "models", "forms", "templates", "static"]
-    for folder in structure:
-        path = f"{feature_name}/{folder}"
-        os.makedirs(path, exist_ok=True)
-        if folder not in ["templates", "static"]:
-            open(f"{path}/__init__.py", "a").close()
-    click.echo(f"Added feature: {feature_name}")
+    """Add a modular app (users, blog, etc.) with clean layout."""
+    create_feature(feature_name)
+    click.echo(f"Added feature structure for: {feature_name}")
 
 if __name__ == "__main__":
     archonkit()

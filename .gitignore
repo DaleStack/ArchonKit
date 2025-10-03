@@ -1,2 +1,7 @@
 venv/
 __pycache__/
+
+archonkit.egg-info/
+
+#Testing
+app/
