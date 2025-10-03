@@ -49,6 +49,30 @@ def get_db():
     with open(f"{app_name}/core/database.py", "w") as f:
         f.write(database_py)
 
+    # Create core/config.py 
+    config_py = '''
+from pydantic_settings import BaseSettings
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Settings(BaseSettings):
+    # DATABASE_URL: str = os.getenv("DATABASE_URL")
+    # SECRET_KEY: str = os.getenv("SECRET_KEY")
+    DEBUG = True
+    
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+settings = Settings()
+'''.lstrip()
+    with open(f"{app_name}/core/config.py", "w") as f:
+        f.write(config_py)
+
+
+
 
 
 def create_feature(feature_name):
@@ -58,8 +82,17 @@ def create_feature(feature_name):
     os.makedirs(os.path.join(feature_name, "static"), exist_ok=True)
 
     # Create empty forms.py and models.py
-    open(os.path.join(feature_name, "forms.py"), "a").close()
-    open(os.path.join(feature_name, "models.py"), "a").close()
+    forms_imports = """from pydantic import BaseModel, Field, EmailStr, field_validator
+"""
+    with open(os.path.join(feature_name, "forms.py"), "w") as f:
+        f.write(forms_imports)
+
+    # Write SQLAlchemy + Base imports to models.py
+    models_imports = """from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, Text, ForeignKey
+from core.database import Base
+"""
+    with open(os.path.join(feature_name, "models.py"), "w") as f:
+        f.write(models_imports)
 
     # Boilerplate routes.py with template rendering
     routes_boilerplate = f"""from fastapi import APIRouter, Request
@@ -103,6 +136,7 @@ async def feature_root(request: Request):
 """
     with open(os.path.join(feature_name, "templates", feature_name, "index.html"), "w") as f:
         f.write(index_html)
+
 
 
 

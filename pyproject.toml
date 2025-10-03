@@ -12,7 +12,7 @@ authors = [
 requires-python = ">=3.8"
 dependencies = [
   "click>=8.0.0",
-  "fastapi[standard]"
+  "fastapi[standard]",
 ]
 
 [project.scripts]
