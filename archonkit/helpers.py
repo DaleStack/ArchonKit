@@ -14,8 +14,11 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
+from core.config import settings
 
 app = FastAPI()
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
@@ -59,7 +62,7 @@ load_dotenv()
 
 class Settings(BaseSettings):
     # DATABASE_URL: str = os.getenv("DATABASE_URL")
-    # SECRET_KEY: str = os.getenv("SECRET_KEY")
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
     DEBUG = True
     
     class Config:
