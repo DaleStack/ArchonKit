@@ -77,8 +77,9 @@ settings = Settings()
     # Create core/utils.py
     utils_py = '''
 from passlib.context import CryptContext
+import secrets
+from datetime import datetime
 
-# Uses argon2 (which defaults to argon2id variant in Passlib)
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 def hash_password(password: str) -> str:
@@ -88,7 +89,40 @@ def hash_password(password: str) -> str:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a plain password against the argon2id hash."""
     return pwd_context.verify(plain_password, hashed_password)
-'''
+
+# --- CSRF Helpers ---
+
+def generate_csrf_token() -> str:
+    """Generate a secure CSRF token for forms."""
+    return secrets.token_urlsafe(32)
+
+def set_csrf_token_in_session(request) -> str:
+    """Generate/set CSRF token in session and return it."""
+    token = generate_csrf_token()
+    request.session["csrf_token"] = token
+    return token
+
+def validate_csrf_token(request, submitted_token: str) -> bool:
+    """Check submitted CSRF token against session value."""
+    return request.session.get("csrf_token") == submitted_token
+
+# --- Session Regeneration Helper ---
+
+def regenerate_session(request, user_id=None, extra=None):
+    """
+    Clears the session, sets new authenticated info (prevents fixation).
+    """
+    request.session.clear()
+    if user_id is not None:
+        request.session["user_id"] = user_id
+        request.session["auth_time"] = datetime.utcnow().isoformat()
+    if extra:
+        for k, v in extra.items():
+            request.session[k] = v
+
+'''.lstrip()
+    with open(f"{app_name}/core/utils.py", "w") as f:
+        f.write(utils_py)
 
 
 
