@@ -13,7 +13,8 @@ requires-python = ">=3.8"
 dependencies = [
   "click>=8.0.0",
   "fastapi[standard]",
-  "pydantic-settings"
+  "pydantic-settings",
+  "passlib[argon2]"
 ]
 
 [project.scripts]
