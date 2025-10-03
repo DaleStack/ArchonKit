@@ -14,7 +14,9 @@ dependencies = [
   "click>=8.0.0",
   "fastapi[standard]",
   "pydantic-settings",
-  "passlib[argon2]"
+  "passlib[argon2]",
+  "itsdangerous",
+  "alembic"
 ]
 
 [project.scripts]
