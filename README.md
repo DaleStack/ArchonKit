@@ -8,3 +8,4 @@ ArchonKit is a CLI toolkit for building **server-rendered applications** with Fa
 - 📂 **Django-like structure**: `forms.py`, `models.py`, `routes.py`, `templates/`, `static/`.
 - 🗄️ **SQLAlchemy ORM** (default) + Alembic migrations.
 - ⚡ **Async-native**: Full FastAPI async support even for MPA development.
+- 🛠️ **Developer workflow**: Inspired by Django’s `makemigrations` / `migrate`
