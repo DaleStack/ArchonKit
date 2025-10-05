@@ -155,7 +155,7 @@ from fastapi.templating import Jinja2Templates
 templates = Jinja2Templates(directory="{feature_name}/templates/{feature_name}")
 
 router = APIRouter(
-    prefix="",
+    prefix="/{feature_name}",
     tags=["{feature_name}"]
 )
 
@@ -201,7 +201,7 @@ def inject_feature_to_main(app_dir, feature_name):
     static_line = (
         f"app.mount('/static/{feature_name}', StaticFiles(directory='{feature_name}/static'), name='{feature_name}_static')\n"
     )
-    router_line = f"app.include_router({feature_name}_routes.router, prefix='/{feature_name}')\n"
+    router_line = f"app.include_router({feature_name}_routes.router)\n"
 
     with open(main_py, "r") as f:
         lines = f.readlines()
