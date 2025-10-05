@@ -5,3 +5,4 @@ ArchonKit is a CLI toolkit for building **server-rendered applications** with Fa
 ## ✨ Features
 
 - 🏗️ **Scaffolding**: Create new projects and modular apps (`users`, `blog`, etc.) with a clean layout.
+- 📂 **Django-like structure**: `forms.py`, `models.py`, `routes.py`, `templates/`, `static/`.
