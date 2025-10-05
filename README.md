@@ -1,1 +1,1 @@
-# **ArchonKit** - Django-style scaffolder  for FastAPI -- MPA-First approach
+# **ArchonKit** - Django-style scaffolder  for FastAPI [MPA-First approach]
