@@ -1,4 +1,19 @@
 **Sample Auth Flow**
+
+`models.py`
+```python
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, Text, ForeignKey
+from core.database import Base
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    username = Column(String(50), unique=True, index=True, nullable=False)
+    email = Column(String(120), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(256), nullable=False)
+    is_active = Column(Boolean, default=True)
+```
+
 `forms.py`
 ```python
 from pydantic import BaseModel, Field, EmailStr, field_validator
