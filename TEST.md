@@ -125,3 +125,19 @@ async def profile(
 {% endblock %}
 
 ```
+
+`login.html`
+```HTML
+{% extends "base.html" %}
+{% block content %}
+<h2>Login</h2>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label>Username: <input name="username" required></label><br>
+  <label>Password: <input name="password" required type="password"></label><br>
+  <button type="submit">Login</button>
+</form>
+{% if error %}<div style="color:red;">{{ error }}</div>{% endif %}
+{% endblock %}
+
+```
