@@ -130,8 +130,26 @@ from functools import wraps
 from fastapi import Request
 from fastapi.responses import RedirectResponse
 from core.config import settings
+from core.database import SessionLocal
+import importlib
+
+
+def get_user_model():
+    """Dynamically import the configured AUTH_USER_MODEL (e.g. 'app.models.User')."""
+    module_name, class_name = settings.AUTH_USER_MODEL.rsplit(".", 1)
+    module = importlib.import_module(module_name)
+    return getattr(module, class_name)
+
 
 def login_required(func):
+    """
+    Ensures a user is authenticated and attaches `request.state.user`.
+
+    - Automatically detects the FastAPI Request object from args/kwargs.
+    - Uses session['user_id'] to fetch the user from the configured AUTH_USER_MODEL.
+    - Redirects to settings.LOGIN_URL if unauthenticated or user not found.
+    - Attaches both `request.state.user_id` and `request.state.user`.
+    """
     @wraps(func)
     async def wrapper(*args, **kwargs):
         # Find the Request object
@@ -139,22 +157,40 @@ def login_required(func):
             (arg for arg in args if isinstance(arg, Request)), None
         )
         if not request:
-            raise RuntimeError("Request object not found")
+            raise RuntimeError("Request object not found in route handler.")
 
+        # Get user_id from session
         user_id = request.session.get("user_id")
         if not user_id:
-            # Redirect dynamically using settings.LOGIN_URL
-            login_url = settings.LOGIN_URL
+            login_url = getattr(settings, "LOGIN_URL", None)
             if login_url:
                 return RedirectResponse(url=login_url, status_code=303)
-            # If LOGIN_URL is not set, raise an error (safeguard)
-            raise RuntimeError("LOGIN_URL is not configured in settings.")
+            raise RuntimeError("LOGIN_URL not configured in settings.")
 
-        # Attach user_id to request state
+        # Load user model dynamically
+        User = get_user_model()
+
+        # Fetch user from DB
+        db = SessionLocal()
+        try:
+            user = db.query(User).filter(User.id == user_id).first()
+        finally:
+            db.close()
+
+        if not user:
+            login_url = getattr(settings, "LOGIN_URL", None)
+            if login_url:
+                return RedirectResponse(url=login_url, status_code=303)
+            raise RuntimeError("LOGIN_URL not configured in settings.")
+
+        # Attach to request.state for downstream access
         request.state.user_id = user_id
+        request.state.user = user
+
         return await func(*args, **kwargs)
 
     return wrapper
+
 '''.lstrip()
     with open(f"{app_name}/core/decorators.py", "w") as f:
         f.write(decorators_py)
