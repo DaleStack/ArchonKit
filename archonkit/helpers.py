@@ -78,7 +78,7 @@ settings = Settings()
     utils_py = '''
 from passlib.context import CryptContext
 import secrets
-from datetime import datetime
+from datetime import datetime, timezone
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
@@ -123,6 +123,41 @@ def regenerate_session(request, user_id=None, extra=None):
 '''.lstrip()
     with open(f"{app_name}/core/utils.py", "w") as f:
         f.write(utils_py)
+
+    # Create core/decorators.py
+    decorators_py = '''
+from functools import wraps
+from fastapi import Request
+from fastapi.responses import RedirectResponse
+from core.config import settings
+
+def login_required(func):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        # Find the Request object
+        request: Request = kwargs.get("request") or next(
+            (arg for arg in args if isinstance(arg, Request)), None
+        )
+        if not request:
+            raise RuntimeError("Request object not found")
+
+        user_id = request.session.get("user_id")
+        if not user_id:
+            # Redirect dynamically using settings.LOGIN_URL
+            login_url = settings.LOGIN_URL
+            if login_url:
+                return RedirectResponse(url=login_url, status_code=303)
+            # If LOGIN_URL is not set, raise an error (safeguard)
+            raise RuntimeError("LOGIN_URL is not configured in settings.")
+
+        # Attach user_id to request state
+        request.state.user_id = user_id
+        return await func(*args, **kwargs)
+
+    return wrapper
+'''.lstrip()
+    with open(f"{app_name}/core/decorators.py", "w") as f:
+        f.write(decorators_py)
 
 
 
