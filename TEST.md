@@ -141,3 +141,14 @@ async def profile(
 {% endblock %}
 
 ```
+
+`profile.html`
+```HTML
+{% extends "base.html" %}
+{% block content %}
+  <h2>Welcome, {{ user.username }}!</h2>
+  <p>Email: {{ user.email }}</p>
+  <a href="/users/logout">Log out</a>
+{% endblock %}
+
+```
