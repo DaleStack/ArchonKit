@@ -141,8 +141,7 @@ async def profile(
     request: Request,
     db: Session = Depends(get_db)
 ):
-    user_id = request.state.user_id
-    user = db.query(User).filter(User.id == user_id).first()
+    user = request.state.user
     return templates.TemplateResponse("profile.html", {"request": request, "user": user})
 ```
 
