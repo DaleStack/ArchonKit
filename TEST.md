@@ -1,4 +1,24 @@
 **Sample Auth Flow**
+`forms.py`
+```python
+from pydantic import BaseModel, Field, EmailStr, field_validator
+
+class SignupForm(BaseModel):
+    username: str = Field(..., min_length=3, max_length=50)
+    email: EmailStr
+    password: str = Field(..., min_length=8)
+
+    @field_validator("username")
+    @classmethod
+    def not_blank(cls, value):
+        if not value.strip():
+            raise ValueError("Username cannot be blank")
+        return value
+
+class LoginForm(BaseModel):
+    username: str = Field(..., min_length=3, max_length=50)
+    password: str = Field(..., min_length=8)
+```
 
 ```python
 from fastapi import APIRouter, Request, Form, HTTPException, Depends
