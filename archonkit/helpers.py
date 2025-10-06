@@ -115,7 +115,7 @@ def regenerate_session(request, user_id=None, extra=None):
     request.session.clear()
     if user_id is not None:
         request.session["user_id"] = user_id
-        request.session["auth_time"] = datetime.utcnow().isoformat()
+        request.session["auth_time"] = datetime.now(timezone.utc).isoformat()
     if extra:
         for k, v in extra.items():
             request.session[k] = v
