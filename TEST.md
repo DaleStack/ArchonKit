@@ -20,6 +20,8 @@ class LoginForm(BaseModel):
     password: str = Field(..., min_length=8)
 ```
 
+
+`routes.py`
 ```python
 from fastapi import APIRouter, Request, Form, HTTPException, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -105,4 +107,21 @@ async def profile(
     user_id = request.state.user_id
     user = db.query(User).filter(User.id == user_id).first()
     return templates.TemplateResponse("profile.html", {"request": request, "user": user})
+```
+
+`signup.html`
+```HTML
+{% extends "base.html" %}
+{% block content %}
+<h2>Signup</h2>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label>Username: <input name="username" required></label><br>
+  <label>Email: <input name="email" required type="email"></label><br>
+  <label>Password: <input name="password" required type="password"></label><br>
+  <button type="submit">Sign Up</button>
+</form>
+{% if error %}<div style="color:red;">{{ error }}</div>{% endif %}
+{% endblock %}
+
 ```
