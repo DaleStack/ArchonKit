@@ -1,5 +1,27 @@
 **Sample Auth Flow**
 
+`config.py`
+```python
+from pydantic_settings import BaseSettings
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Settings(BaseSettings):
+    DATABASE_URL: str = os.getenv("DATABASE_URL")
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
+    DEBUG: str = os.getenv("DEBUG")
+    LOGIN_URL: str = os.getenv("LOGIN_URL")
+    
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+settings = Settings()
+
+```
+
 `models.py`
 ```python
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float, Text, ForeignKey
