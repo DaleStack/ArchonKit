@@ -1,5 +1,6 @@
 import os
 
+
 def create_app(app_name):
     os.makedirs(f"{app_name}/core", exist_ok=True)
     os.makedirs(f"{app_name}/templates", exist_ok=True)
@@ -7,7 +8,7 @@ def create_app(app_name):
     # Create templates/index.html
     with open(f"{app_name}/templates/index.html", "w") as f:
         f.write("<h1>{{ msg }}</h1>")
-    
+
     # Create main.py (as before)
     main_py_content = """
 from fastapi import FastAPI, Request
@@ -27,7 +28,7 @@ async def root(request: Request):
     """.strip()
     with open(f"{app_name}/main.py", "w") as f:
         f.write(main_py_content)
-    
+
     # Create core/database.py
     database_py = """
 from sqlalchemy import create_engine
@@ -52,8 +53,8 @@ def get_db():
     with open(f"{app_name}/core/database.py", "w") as f:
         f.write(database_py)
 
-    # Create core/config.py 
-    config_py = '''
+    # Create core/config.py
+    config_py = """
 from pydantic_settings import BaseSettings
 import os
 from dotenv import load_dotenv
@@ -70,7 +71,7 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
 
 settings = Settings()
-'''.lstrip()
+""".lstrip()
     with open(f"{app_name}/core/config.py", "w") as f:
         f.write(config_py)
 
@@ -195,7 +196,7 @@ def login_required(func):
     with open(f"{app_name}/core/decorators.py", "w") as f:
         f.write(decorators_py)
 
-    messages_py = '''
+    messages_py = """
 from typing import Any, Dict, List, Optional
 from fastapi import Request
 
@@ -230,12 +231,9 @@ def pop_all(request: Request) -> List[Dict[str, Any]]:
         request.session[_STORAGE_KEY] = []
     return msgs
 
-'''.lstrip()
+""".lstrip()
     with open(f"{app_name}/core/messages.py", "w") as f:
         f.write(messages_py)
-
-
-
 
 
 def create_feature(feature_name):
@@ -289,7 +287,9 @@ async def feature_root(request: Request):
 </body>
 </html>
 """
-    with open(os.path.join(feature_name, "templates", feature_name, "base.html"), "w") as f:
+    with open(
+        os.path.join(feature_name, "templates", feature_name, "base.html"), "w"
+    ) as f:
         f.write(base_html)
 
     # Boilerplate index.html extending base.html
@@ -298,39 +298,52 @@ async def feature_root(request: Request):
 <h1>{{ msg }}</h1>
 {% endblock %}
 """
-    with open(os.path.join(feature_name, "templates", feature_name, "index.html"), "w") as f:
+    with open(
+        os.path.join(feature_name, "templates", feature_name, "index.html"), "w"
+    ) as f:
         f.write(index_html)
-
-
 
 
 def inject_feature_to_main(app_dir, feature_name):
     main_py = os.path.join(app_dir, "main.py")
 
     import_line = f"import {feature_name}.routes as {feature_name}_routes\n"
-    static_line = (
-        f"app.mount('/static/{feature_name}', StaticFiles(directory='{feature_name}/static'), name='{feature_name}_static')\n"
-    )
+    static_line = f"app.mount('/static/{feature_name}', StaticFiles(directory='{feature_name}/static'), name='{feature_name}_static')\n"
     router_line = f"app.include_router({feature_name}_routes.router)\n"
 
     with open(main_py, "r") as f:
         lines = f.readlines()
 
     # Insert import_line after the last import
-    last_import = max(i for i, l in enumerate(lines) if l.strip().startswith(("import ", "from ")))
+    last_import = max(
+        i
+        for i, line in enumerate(lines)
+        if line.strip().startswith(("import ", "from "))
+    )
     if import_line not in lines:
         lines.insert(last_import + 1, import_line)
 
     # Insert static_line after the last app.mount (or after app = FastAPI())
-    mount_indices = [i for i, l in enumerate(lines) if l.strip().startswith("app.mount")]
-    mount_insert_idx = (mount_indices[-1] + 1 if mount_indices else 
-                        next(i for i, l in enumerate(lines) if "app = FastAPI()" in l) + 1)
+    mount_indices = [
+        i for i, line in enumerate(lines) if line.strip().startswith("app.mount")
+    ]
+    mount_insert_idx = (
+        mount_indices[-1] + 1
+        if mount_indices
+        else next(i for i, line in enumerate(lines) if "app = FastAPI()" in line) + 1
+    )
     if static_line not in lines:
         lines.insert(mount_insert_idx, static_line)
 
     # Insert router_line after the last app.include_router (or after last mount)
-    router_indices = [i for i, l in enumerate(lines) if l.strip().startswith("app.include_router")]
-    router_insert_idx = (router_indices[-1] + 1 if router_indices else mount_insert_idx + 1)
+    router_indices = [
+        i
+        for i, line in enumerate(lines)
+        if line.strip().startswith("app.include_router")
+    ]
+    router_insert_idx = (
+        router_indices[-1] + 1 if router_indices else mount_insert_idx + 1
+    )
     if router_line not in lines:
         lines.insert(router_insert_idx, router_line)
 
@@ -340,5 +353,3 @@ def inject_feature_to_main(app_dir, feature_name):
         code = code.replace("\n\n\n", "\n\n")
     with open(main_py, "w") as f:
         f.write(code)
-
-
