@@ -29,6 +29,24 @@ Although ArchonKit integrates tightly with **SQLAlchemy**, this coupling is **in
 
 ---
 
+## 🌍 Why MPA-First
+
+ArchonKit follows an **MPA-first (Multi-Page Application)** philosophy — prioritizing **server-rendered pages** over heavy front-end frameworks.
+
+Modern web stacks have become increasingly complex, with layers of client-side routing, hydration, and state management. ArchonKit brings back the simplicity of traditional web development while embracing the best of modern async Python.
+
+### Why It Matters
+- 🧩 **Simplicity by Design** – Each request is rendered on the server — no build tools, hydration, or complex front-end state to manage.  
+- ⚡ **Performance & SEO** – Server-rendered HTML means faster first paint, better SEO, and minimal JavaScript.  
+- 🧠 **Developer Productivity** – Focus on Python, templates, and logic — not front-end pipelines.  
+- 🔌 **Async & Real-Time Ready** – Powered by FastAPI, ArchonKit supports async I/O, WebSockets, and streaming responses.  
+- 🪶 **Light but Dynamic** – Combine with htmx or Alpine.js for SPA-like interactivity without the overhead.
+
+> In 2025, MPAs aren’t outdated — they’re *evolving*.  
+> ArchonKit embraces this evolution, merging the **clarity of classic web apps** with the **performance and capabilities of modern async frameworks**.
+
+---
+
 ## ✨ Features
 
 - 🏗️ **Project & App Scaffolding** – Quickly create new projects and modular apps (`users`, `blog`, etc.) with a clean layout.  
