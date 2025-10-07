@@ -20,7 +20,7 @@ FastAPI, on the other hand, provides a clean and modular foundation that allows 
 - ⚡ **ASGI & Async-Native** – Runs on modern Python async I/O for high performance and scalability.  
 - 🧩 **Monolithic by Design** – Everything lives in one cohesive project for simplicity and clarity.  
 - 🧠 **MPA-First** – Focused on classic, server-rendered pages using Jinja2 templates.  
-- 🧱 **Opinionated, Not Restrictive** – Offers structure without getting in your way.  
+- 🧱 **Opinionated, Not Restrictive** – Provides structure while staying flexible where it matters. 
 - 🔮 **Future-Ready** – Built to support WebSockets, streaming, and reactive UI patterns.
 
 Although ArchonKit integrates tightly with **SQLAlchemy**, this coupling is **intentional and modular** — providing a powerful database layer without the heavy abstractions of Django’s stack.
