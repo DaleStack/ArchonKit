@@ -9,6 +9,12 @@ While Django has long been the standard for full-stack development, it’s also 
 
 FastAPI offers a clean, async-native foundation that allows ArchonKit to stay **monolithic by choice**, yet **modern in design**.
 
+### Why It Fits ArchonKit
+- ⚡ **ASGI & Async-Native** – Runs on modern Python async I/O for high performance and scalability.  
+- 🧩 **Monolithic by Design** – Everything lives under one project, keeping development simple and cohesive.  
+- 🧠 **MPA-First** – Focused on server-rendered pages with Jinja2 and htmx for dynamic interactivity.  
+- 🧱 **Opinionated, Not Restrictive** – Provides structure while staying flexible where it matters.  
+- 🔮 **Future-Ready** – Built to handle WebSockets, streaming, and reactive UI patterns.
 
 ## ✨ Features
 
