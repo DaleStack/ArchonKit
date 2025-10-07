@@ -195,6 +195,45 @@ def login_required(func):
     with open(f"{app_name}/core/decorators.py", "w") as f:
         f.write(decorators_py)
 
+    messages_py = '''
+from typing import Any, Dict, List, Optional
+from fastapi import Request
+
+_STORAGE_KEY = "_messages"
+
+def add(request: Request, message: str, level: str = "info",
+        tags: Optional[str] = None, data: Optional[Dict[str, Any]] = None) -> None:
+    queue: List[Dict[str, Any]] = request.session.get(_STORAGE_KEY, [])
+    item: Dict[str, Any] = {"message": message, "level": level}
+    if tags:
+        item["tags"] = tags
+    if data:
+        item["data"] = data
+    queue.append(item)
+    request.session[_STORAGE_KEY] = queue
+
+def success(request: Request, message: str, tags: Optional[str] = None, data: Optional[Dict[str, Any]] = None) -> None:
+    add(request, message, "success", tags, data)
+
+def info(request: Request, message: str, tags: Optional[str] = None, data: Optional[Dict[str, Any]] = None) -> None:
+    add(request, message, "info", tags, data)
+
+def warning(request: Request, message: str, tags: Optional[str] = None, data: Optional[Dict[str, Any]] = None) -> None:
+    add(request, message, "warning", tags, data)
+
+def error(request: Request, message: str, tags: Optional[str] = None, data: Optional[Dict[str, Any]] = None) -> None:
+    add(request, message, "error", tags, data)
+
+def pop_all(request: Request) -> List[Dict[str, Any]]:
+    msgs: List[Dict[str, Any]] = request.session.get(_STORAGE_KEY, [])
+    if msgs:
+        request.session[_STORAGE_KEY] = []
+    return msgs
+
+'''.lstrip()
+    with open(f"{app_name}/core/messages.py", "w") as f:
+        f.write(messages_py)
+
 
 
 
