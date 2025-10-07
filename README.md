@@ -3,6 +3,7 @@
 ## 📚 Table of Contents
 
 - [👑 ArchonKit — A Django-Style Framework for FastAPI (MPA-First Approach)](#-archonkit--a-django-style-framework-for-fastapi-mpa-first-approach)
+- [💡 Why ArchonKit](#-why-archonkit)
 - [🧠 Why FastAPI Instead of Django](#-why-fastapi-instead-of-django)
 - [🌍 Why MPA-First](#-why-mpa-first)
 - [✨ Features](#-features)
@@ -15,6 +16,21 @@ It provides a **Django-like project structure** and developer experience while k
 ArchonKit helps developers build traditional, **monolithic, server-rendered web apps** — without sacrificing the benefits of an async architecture.
 
 > 🧱 **MPA-First. Monolithic. Modern.**
+
+---
+
+## 💡 Why ArchonKit
+
+I started building **ArchonKit** because I wanted to create **server-rendered (MPA) applications** with **FastAPI** — but quickly realized that FastAPI doesn’t provide much support for that use case.  
+
+It’s great for APIs, but when building MPAs, I often found myself **repeating the same setup**: configuring templates, writing boilerplate routes, managing static files, and setting up SQLAlchemy models manually every time.  
+There was **no clear structure or tooling** for full web apps — just pieces I had to assemble from scratch.
+
+So I built **ArchonKit** to streamline that process:  
+to bring a **Django-style structure and workflow** to FastAPI,  
+while keeping its **async speed and flexibility**.
+
+> ArchonKit grew out of my own need to make FastAPI feel at home for building **traditional, monolithic, server-rendered web applications**.
 
 ---
 
