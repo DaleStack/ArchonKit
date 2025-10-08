@@ -16,7 +16,8 @@ dependencies = [
   "pydantic-settings",
   "passlib[argon2]",
   "itsdangerous",
-  "alembic"
+  "alembic",
+  "sqladmin"
 ]
 
 [project.scripts]

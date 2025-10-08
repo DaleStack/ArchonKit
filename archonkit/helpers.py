@@ -61,6 +61,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+ADMIN_MODULES = []
+
 class Settings(BaseSettings):
     DATABASE_URL: str = os.getenv("DATABASE_URL")
     SECRET_KEY: str = os.getenv("SECRET_KEY")
@@ -235,7 +237,56 @@ def pop_all(request: Request) -> List[Dict[str, Any]]:
     with open(f"{app_name}/core/messages.py", "w") as f:
         f.write(messages_py)
 
+    admin_loader_py = """
+# core/admin_loader.py
+import importlib
+import pkgutil
+from sqladmin import Admin
+from sqladmin import ModelView
 
+
+def register_admin_views(admin: Admin, module_names: list[str]):
+    
+    # Automatically imports all admin modules and registers all ModelView subclasses.
+    # Supports both 'app' and 'app.admin' module names.
+
+    for name in module_names:
+        # Try to handle both 'app' and 'app.admin'
+        try:
+            package = importlib.import_module(name)
+        except ModuleNotFoundError:
+            # maybe it was just the app name (e.g. 'users')
+            try:
+                package = importlib.import_module(f"{name}.admin")
+            except ModuleNotFoundError:
+                continue
+
+        # If the module itself is the admin module, skip iterating
+        if not hasattr(package, "__path__"):
+            module = package
+        else:
+            # find its admin.py submodule
+            try:
+                module = importlib.import_module(f"{name}.admin")
+            except ModuleNotFoundError:
+                continue
+
+        # Now scan for subclasses of ModelView
+        for attr_name in dir(module):
+            attr = getattr(module, attr_name)
+            if (
+                isinstance(attr, type)
+                and issubclass(attr, ModelView)
+                and attr is not ModelView
+            ):
+                admin.add_view(attr)
+
+""".lstrip()
+    with open(f"{app_name}/core/admin_loader.py", "w") as f:
+        f.write(admin_loader_py)
+
+
+# FEATURE
 def create_feature(feature_name):
     # Create feature directory structure
     os.makedirs(feature_name, exist_ok=True)
