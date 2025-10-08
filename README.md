@@ -1,3 +1,8 @@
+<div align="center">
+  <img src="assets/ArchonKit.png" alt="Logo" width="300">
+</div>
+
+
 # 👑 **ArchonKit** — A Django-Style Framework for FastAPI (MPA-First Approach)
 
 ## 📚 Table of Contents
